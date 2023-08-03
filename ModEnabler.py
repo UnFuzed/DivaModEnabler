@@ -10,7 +10,15 @@ psg.theme("DarkBlue14")
 
 
 #get mod folder names
-mod_folders = os.listdir(os.getcwd() + '/mods')
+try:
+    mod_folders = os.listdir(os.getcwd() + '/mods')
+    
+except:
+    
+    psg.popup_error("Can not find mods folder")
+    
+else:
+    pass
 
 #window layout
 column_one = [[psg.Listbox(mod_folders, default_values = mod_folders[0], size = (50, 20), key = "--List--", enable_events = True),],
