@@ -3,6 +3,7 @@
 
 
 import os
+import sys
 import platform
 import PySimpleGUI as psg
 import textwrap as tw
@@ -13,12 +14,15 @@ base64 = b'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABbmlDQ1BpY2MAACiRdZG7S
 
 psg.set_global_icon(base64)
 
-#get mod folder names
+#get mod folder names if it can't then crashs
 try:
     mod_folders = os.listdir(os.getcwd() + '/mods')
     
 except: 
     psg.PopupError("No mods folder located")
+    sys.exit()
+
+else:
     pass
     
 #window layout
