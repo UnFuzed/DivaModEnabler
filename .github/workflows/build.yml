@@ -3,8 +3,9 @@ on: [push, pull_request]
 
 jobs:
     build:
+      strategy:
         matrix:
-            platform: [macos-latest, windows-latest, ubuntu-latest]
+          platform: [macos-latest, windows-latest, ubuntu-latest]
         runs-on: ${{ matrix.platform }}
         steps:
            - uses: actions/checkout@v3
