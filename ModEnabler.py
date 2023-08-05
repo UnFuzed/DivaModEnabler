@@ -10,15 +10,7 @@ psg.theme("DarkBlue14")
 
 
 #get mod folder names
-try:
-    mod_folders = os.listdir(os.getcwd() + '/mods')
-    
-except:
-    
-    psg.popup_error("Can not find mods folder")
-    
-else:
-    pass
+mod_folders = os.listdir(os.getcwd() + '/mods')
 
 #window layout
 column_one = [[psg.Listbox(mod_folders, default_values = mod_folders[0], size = (50, 20), key = "--List--", enable_events = True),],
@@ -183,8 +175,32 @@ while True:
     
         
     if event == "--Viewer--":
+        
+        #writes new entry into config.toml
         with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
-            file.write(values["--Viewer--"][0])
+            file.write(values["--Viewer--"])
+        
+        #makes sure the file gets saved
+        file.close()
+        
+     
+        
+        #checks to see if the new entry is enabled/disabled or missing 
+        with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "r") as file:
+            contents = file.read()
+        
+        
+        #if found true update checkbox to be checked
+        if contents.find("enabled = true") != -1:
+            window["--Check--"].update(True)
+            
+        #if found false update checkbox to be unchecked
+        elif contents.find("enabled = false") != -1:
+            window["--Check--"].update(False)        
+        
+        else: 
+            window["--Check--"].update(False)    
+            window["--Text--"].update("Missing enabled config.toml line. Please add")
        
        
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
