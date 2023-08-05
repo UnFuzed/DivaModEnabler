@@ -8,16 +8,21 @@ jobs:
         runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           cache: 'pip'
+
       - run: pip install pysimplegui pyinstaller
+
       - name: Dependencies
         if: startsWith(matrix.platform, 'ubuntu')
         run: sudo apt install tk
+
       - name: Build
         run: pyinstaller --onefile ModEnabler.py
+
       - name: Upload ${{ matrix.platform }}
         uses: actions/upload-artifact@v3
         with:
