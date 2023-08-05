@@ -1,31 +1,34 @@
-name: Build
-on: [push, pull_request]
-
+name: build
+on:
+  push:
+  pull_request:
 jobs:
-    build:
-      strategy:
-        matrix:
-          platform: [macos-latest, windows-latest, ubuntu-latest]
-        runs-on: ${{ matrix.platform }}
-        steps:
-           - uses: actions/checkout@v3
+  test-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, windows-latest, ubuntu-20.04]
 
-           - uses: actions/setup-python@v4
-             with:
-                python-version: '3.9'
-                cache: 'pip'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
 
-           - run: pip install pysimplegui pyinstaller
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
 
-           - name: Dependencies
-             if: startsWith(matrix.platform, 'ubuntu')
-             run: sudo apt install tk
+      - run: pip install pysimplegui pyinstaller
 
-           - name: Build
-             run: pyinstaller --onefile ModEnabler.py
+      - name: Dependencies
+        if: startsWith(matrix.platform, 'ubuntu')
+        run: sudo apt install tk
 
-           - name: Upload ${{ matrix.platform }}
-             uses: actions/upload-artifact@v3
-             with:
-               name: ${{ matrix.platform }}
-               path: dist/*
+      - name: Build
+        run: pyinstaller --onefile ModEnabler.py
+
+      - name: Upload ${{ matrix.platform }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.platform }}
+          path: dist/*
