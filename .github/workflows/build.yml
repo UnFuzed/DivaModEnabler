@@ -19,12 +19,22 @@ jobs:
 
       - name: Build
         uses: sayyid5416/pyinstaller@v1
+        if: "!startsWith(matrix.platform, 'windows')"
         with:
           python_ver: '3.11.3'
           spec: ModEnabler.py
           requirements: requirements.txt
           options: --onefile, --noconsole
-
+          
+      - name: Build Windows
+        uses: sayyid5416/pyinstaller@v1
+        if: startsWith(matrix.platform, 'windows')
+        with:
+          python_ver: '3.11.3'
+          spec: ModEnabler.py
+          requirements: requirements.txt
+          options: --onefile, --noconsole, --icon icon/DME.ico
+          
       - name: Upload ${{ matrix.platform }}
         uses: actions/upload-artifact@v3
         with:
