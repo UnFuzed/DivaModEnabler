@@ -3,6 +3,8 @@
 
 
 import os
+import subprocess
+import platform
 import PySimpleGUI as psg
 import textwrap as tw
 
@@ -10,8 +12,14 @@ psg.theme("DarkBlue14")
 
 
 #get mod folder names
-mod_folders = os.listdir(os.getcwd() + '/mods')
 
+try:
+    mod_folders = os.listdir(os.getcwd() + '/mods')
+    
+except: 
+    psg.PopupError("No mods folder located")
+    exit()
+    
 #window layout
 column_one = [[psg.Listbox(mod_folders, default_values = mod_folders[0], size = (50, 20), key = "--List--", enable_events = True),],
               [psg.Text("Log: "), psg.Text("", key = "--Text--", size = 30, pad = 10)],
@@ -78,7 +86,7 @@ def check_mod(select):
         
         else: 
             
-            window["--Text--"].update("Missing include config.toml line. Please add")
+            window["--Text--"].update("Missing enabled config.toml line")
             
         
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
@@ -92,7 +100,7 @@ def check_mod(select):
                 if contents.find(f'dll = [') == -1:
                       
                     #user error messaging  
-                    psg.PopupError(select + " is missing the DLL config.toml line")
+                    window["--Text--"].update(select + " is missing the dll config.toml line")
                     
                         
             #if there is a rom folder and there is no line for it in the config.toml
@@ -101,7 +109,7 @@ def check_mod(select):
                 if contents.find('include = [') == -1:
                     
                     #user error messaging 
-                    psg.PopupError(select + " is missing the include config.toml line")
+                    window["--Text--"].update(select + " is missing the include config.toml line")
                     
           
         
@@ -200,7 +208,7 @@ while True:
         
         else: 
             window["--Check--"].update(False)    
-            window["--Text--"].update("Missing enabled config.toml line. Please add")
+            window["--Text--"].update("Missing enabled config.toml line")
        
        
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
@@ -259,7 +267,13 @@ while True:
       
 #When opening the mod folder      
     if event == "Open":
-        os.startfile(os.getcwd() + "/mods/" + values["--List--"][0])
+        
+        match platform.system():
+        
+            case "Windows":  os.system('explorer "%s"' % os.getcwd() + "/mods/" + values["--List--"][0])
+            
+            case "Linux": os.system('xdg-open "%s"' % os.getcwd() + "/mods/" + values["--List--"][0])
+            
         
         
         
