@@ -19,7 +19,7 @@ try:
     
 except: 
     psg.PopupError("No mods folder located")
-    exit()
+    pass
     
 #window layout
 column_one = [[psg.Listbox(mod_folders, default_values = mod_folders[0], size = (50, 20), key = "--List--", enable_events = True),],
