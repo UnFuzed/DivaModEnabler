@@ -33,7 +33,7 @@ jobs:
           python_ver: '3.11.3'
           spec: ModEnabler.py
           requirements: requirements.txt
-          options: --onefile, --noconsole, --icon icon/DME.ico
+          options: --onefile, --noconsole, --icon="icon/DME.ico"
           
       - name: Upload ${{ matrix.platform }}
         uses: actions/upload-artifact@v3
