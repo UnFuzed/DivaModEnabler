@@ -13,13 +13,13 @@ like enabling and disabling many different mods quickly. There is plans for more
 - Opening mod folders
 - Editing config.toml directly from DivaModEnabler
 - Error log if a mod won't work properly
-- Changable mods folder name
 
 
 ## Planned Features:
 
 - Loadouts
 - More Misc information about installed mods
+- Changable mods folder name
 
 
 # Instructions
