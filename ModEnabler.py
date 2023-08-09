@@ -13,6 +13,9 @@ import ast
 mod_folders = []
 
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 #writes to viewer heo new contents of the config.toml
 def update_mod_enable(select):
@@ -131,7 +134,7 @@ def check_mod(select, write):
         
         else: 
             
-            window["--Text--"].update("Missing enabled config.toml line")
+            window["--Text--"].update("Log: Missing enabled =")
             
         
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
@@ -145,7 +148,7 @@ def check_mod(select, write):
                 if contents.find(f'dll = [') == -1:
                       
                     #user error messaging  
-                    window["--Text--"].update("Missing the dll config.toml line")
+                    window["--Text--"].update("Log: Missing the dll =")
                     
                         
             #if there is a rom folder and there is no line for it in the config.toml
@@ -154,9 +157,11 @@ def check_mod(select, write):
                 if contents.find('include = [') == -1:
                     
                     #user error messaging 
-                    window["--Text--"].update("Missing the include config.toml line")
+                    window["--Text--"].update("Log: Missing the include =")
 
 
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -170,27 +175,26 @@ psg.theme("DarkBlue14")
 load_mods()
 
 
-#window layout
-info_frame = [
-             [psg.Text("V1.1", font = 20, size = 10), psg.Text("Mods: " + str(len(mod_folders)), font = 20, key = "--Mod Count--")]
-             ]
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+#window layout
 column_one = [
-             [psg.Listbox(mod_folders,default_values = [mod_folders[0]], size = (50, 20), key = "--List--", enable_events = True),],
-             [psg.Text("Log: "), psg.Text("", key = "--Text--", size = 35, pad = 10)],
-             [psg.Push(), psg.Button("Move Up", size = (8, 2), border_width = 5), psg.Button("Move Down", size = (8, 2), border_width= 5), psg.Button("Enable All", size = (8, 2), border_width = 5), psg.Button("Disable All", size = (8, 2), border_width= 5), psg.Push()],
+             [psg.Button("🡅", font = 10, key = "Move Up", size = (4, 1)), psg.Button("🡇", font = 10, key = "Move Down", size = (4, 1)), psg.Push(), psg.Button("Enable All", size = (10, 1)), psg.Button("Disable All", size = (10, 1))],
+             [psg.Listbox(mod_folders, default_values = [mod_folders[0]], size = (50, 27), key = "--List--", enable_events = True, pad = 2)],
+             [psg.Button("Refresh", size = (10, 1)), psg.Text("Log: ", key = "--Text--", size = 32)],
              ]
               
 column_two = [
-             [psg.Push(), psg.Text("Mod Name", key = "--Name--", font = ("Arial", 15, "bold"), size = 30, justification = "center"), psg.Push()],
-             [psg.Checkbox("Enabled",True, enable_events = True, key = "--Check--"), psg.Button("Open", size = (10, 1), border_width = 5), ],
-             [psg.Multiline("", key = "--Viewer--", size = (50, 16), enable_events = True, border_width = 5)],
-             [psg.Text("", size = 30, pad = 10)],
-             [psg.Button("Reset Folders", size = (20, 2), border_width= 5), psg.Frame("Information", info_frame, border_width = 5)]
+             [psg.Push(), psg.Text("Mod Name", key = "--Name--", font = ("Arial", 15, "bold"), size = 30, justification = "center", pad = ((0, 0), (0, 14))), psg.Push()],
+             [psg.Checkbox("Enabled",True, enable_events = True, key = "--Check--"), psg.Push(), psg.Button("Open", size = (10, 1))],
+             [psg.Multiline("", key = "--Viewer--", size = (50, 26), enable_events = True)],
+             [psg.Push(), psg.Text("Diva Mod Enabler V1.1", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
              ]
 
 layout = [
-         [psg.Column(column_one), psg.VSeparator(), psg.Column(column_two)]
+         [psg.Column(column_one), psg.VSeparator(), psg.Column(column_two)],
          ]
 
 window = psg.Window("DivaModEnabler", layout, grab_anywhere = True, enable_close_attempted_event=True, finalize = True)
@@ -206,7 +210,7 @@ check_mod(mod_folders[0], True)
 while True:
         
     event, values = window.read()
-    window["--Text--"].update("")
+    window["--Text--"].update("Log: ")
         
     #close window
     if event == psg.WINDOW_CLOSE_ATTEMPTED_EVENT:
@@ -216,13 +220,13 @@ while True:
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
     
     #resets the listbox with updated folders
-    if event == "Reset Folders":
+    if event == "Refresh":
         load_mods()
         window["--Mod Count--"].update("Mods: " + str(len(mod_folders)))
         window["--List--"].update(mod_folders)
         window["--List--"].update(set_to_index = 0)
         
-        window["--Text--"].update("Reset mod folder")
+        window["--Text--"].update("Log: Refreshed")
         
         #checks the first mod in the list to see if its enabled or not
         check_mod(mod_folders[0], True)
@@ -248,12 +252,12 @@ while True:
             case True:
             
                 new_entry = contents.replace("enabled = false", "enabled = true")
-                window["--Text--"].update("Enabled " + values["--List--"][0])
+                window["--Text--"].update("Log: Enabled " + values["--List--"][0])
 
             case False:
             
                 new_entry = contents.replace("enabled = true", "enabled = false")
-                window["--Text--"].update("Disabled " + values["--List--"][0])
+                window["--Text--"].update("Log: Disabled " + values["--List--"][0])
 
         #writes the new config.toml text
         with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
@@ -294,7 +298,7 @@ while True:
             else:
                 
                 new_entry = contents.replace("enabled = false", "enabled = true")
-                window["--Text--"].update("Enabled all mods")
+                window["--Text--"].update("Log: Enabled all mods")
                 window["--Check--"].update(True)
                     
             
@@ -319,7 +323,7 @@ while True:
                 
             else:
                 new_entry = contents.replace("enabled = true", "enabled = false")
-                window["--Text--"].update("Disabled all mods")
+                window["--Text--"].update("Log: Disabled all mods")
                 window["--Check--"].update(False)
                     
             
@@ -381,7 +385,9 @@ while True:
             case "Windows": os.startfile(os.getcwd() + "/mods/" + values["--List--"][0])
             case "Linux": os.system('xdg-open "%s"' % os.getcwd() + "/mods/" + values["--List--"][0])
             
-        
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      
         
         
         
