@@ -13,12 +13,14 @@ like enabling and disabling many different mods quickly. There is plans for more
 - Opening mod folders
 - Editing config.toml directly from DivaModEnabler
 - Error log if a mod won't work properly
+- Mod priority loading
+- More Misc information about installed mods
 
 
 ## Planned Features:
 
 - Loadouts
-- More Misc information about installed mods
+- User made custom GUI colors 
 - Changable mods folder name
 
 
