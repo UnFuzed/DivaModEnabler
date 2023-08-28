@@ -1,4 +1,4 @@
-#Version 1.2
+#Version 1.3
 #DivaModEnabler
 #UnFuzed
 
@@ -25,6 +25,14 @@ default_custom_colors = {
         "text_color" : "#FDFDFD",
         "input_text_color" : "#FDFDFD",
         }
+
+default_mod_template = 'enabled = true\n\
+name = Template Mod\n\
+description = "This is a template mod!"\n\
+version = "1.0"\n\
+date = "27.05.2022"\n\
+author = "Skyth"\n\
+include = ["."]\n'
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -62,9 +70,6 @@ def color_load():
     except:
         psg.theme("DarkBlue14")
 
-    else:
-        pass
-            
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -188,6 +193,8 @@ def check_mod(select, write):
         else: 
             
             window["--Text--"].update("Log: Missing enabled =")
+            window["--Check--"].update(False)
+            window["--Check--"].update(disabled = True)
             
         
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
@@ -196,7 +203,7 @@ def check_mod(select, write):
         for files in os.listdir(os.getcwd() + "/mods/" + select):
             
              #if there is a DLL file and there is no line for it in the config.toml.
-            if ".dll" in files and files.count(".") < 2:
+            if ".dll" in files:
                 
                 if contents.find(f'dll = [') == -1:
                       
@@ -241,13 +248,14 @@ column_two = [
              [psg.Push(), psg.Text("Mod Name", key = "--Name--", font = ("Arial", 15, "bold"), size = 30, justification = "center", pad = ((0, 0), (0, 14))), psg.Push()],
              [psg.Checkbox("Enabled",True, enable_events = True, key = "--Check--"), psg.Push(), psg.Button("Open", size = (10, 1)), psg.Button(">", size = (2, 1), key = "--Extend--")],
              [psg.Multiline("", key = "--Viewer--", size = (50, 26), enable_events = True)],
-             [psg.Push(), psg.Text("Diva Mod Enabler V1.2", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
+             [psg.Push(), psg.Text("Diva Mod Enabler V1.3", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
              ]
 column_three = [
                [psg.Button('Download Mods', size = (10, 2), pad = 10)],
                [psg.Button('Export Mods List', size = (10, 2), pad = 10)],
                [psg.Button('Generate Color Config', size = (10, 2), pad = 10)],
                [psg.Button('Github Page', size = (10, 2), pad = 10)],
+               [psg.Button('Create Mod', size = (10, 2), pad = 10)],
                [psg.Button('Exit', size = (10, 2), pad = 10)],
                ]
 
@@ -499,6 +507,26 @@ while True:
 
     if event == "Github Page":
         wb.open("https://github.com/UnFuzed/DivaModEnabler", 2)
+
+
+    if event == "Create Mod":
+        try:
+
+            os.makedirs(os.getcwd() + "/mods/Template Mod/rom")
+            with open(os.getcwd() + "/mods/Template Mod/config.toml", "x") as file:
+                file.write(default_mod_template)
+
+        except:
+            window["--Text--"].update("Template mod already exist")
+
+        else:
+            window["--Text--"].update("Template mod created")
+            mod_folders = load_mods(mod_folders)
+            window["--Mod Count--"].update("Mods: " + str(len(mod_folders)))
+            window["--List--"].update(mod_folders)
+            window["--List--"].update(set_to_index = 0)
+            update_mod_enable(mod_folders[0])
+            check_mod(mod_folders[0], True)
 
 
     if event == "Exit":

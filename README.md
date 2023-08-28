@@ -17,6 +17,7 @@ like enabling and disabling many different mods quickly. There is plans for more
 - More Misc information about installed mods
 - User made custom GUI colors
 - Export mod list 
+- Creation of Template Mod
 
 
 ## Planned Features:
