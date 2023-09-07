@@ -1,4 +1,4 @@
-#Version 1.3
+#Version 1.4
 #DivaModEnabler
 #UnFuzed
 
@@ -248,11 +248,13 @@ column_two = [
              [psg.Push(), psg.Text("Mod Name", key = "--Name--", font = ("Arial", 15, "bold"), size = 30, justification = "center", pad = ((0, 0), (0, 14))), psg.Push()],
              [psg.Checkbox("Enabled",True, enable_events = True, key = "--Check--"), psg.Push(), psg.Button("Open", size = (10, 1)), psg.Button(">", size = (2, 1), key = "--Extend--")],
              [psg.Multiline("", key = "--Viewer--", size = (50, 26), enable_events = True)],
-             [psg.Push(), psg.Text("Diva Mod Enabler V1.3", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
+             [psg.Push(), psg.Text("Diva Mod Enabler V1.4", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
              ]
 column_three = [
+               [psg.Text('', size = (10, 2), pad = 10)],
                [psg.Button('Download Mods', size = (10, 2), pad = 10)],
                [psg.Button('Export Mods List', size = (10, 2), pad = 10)],
+               [psg.Button('Reset Mod Order', size = (10, 2), pad = 10)],
                [psg.Button('Generate Color Config', size = (10, 2), pad = 10)],
                [psg.Button('Github Page', size = (10, 2), pad = 10)],
                [psg.Button('Create Mod', size = (10, 2), pad = 10)],
@@ -276,6 +278,7 @@ check_mod(mod_folders[0], True)
                     
 #main loop
 while True:
+    print(mod_folders)
         
     event, values = window.read()
     window["--Text--"].update("Log: ")
@@ -491,6 +494,26 @@ while True:
 
         psg.popup_auto_close("Created modlist.txt at\n" + os.getcwd(), auto_close_duration = 2, title = "DivaModEnabler")
         window["--Text--"].update("Log: Created modlist.txt")
+
+
+    if event == "Reset Mod Order":
+        mod_folders = os.listdir(os.getcwd() + '/mods')
+        window["--List--"].update(mod_folders)
+        window["--List--"].update()
+        window["--Text--"].update("Log: Reset Mod Order")
+        window["--List--"].update(set_to_index = 0)
+        window["--List--"].update(scroll_to_index = 0)
+        update_mod_enable(mod_folders[0])
+        check_mod(mod_folders[0], True)
+
+
+        with open("config.toml", "r+") as file:
+                contents = file.read()
+                file.write("")
+
+        with open("config.toml", "w") as file:
+                file.write(contents[:contents.find("priority")] + "priority = " + str(mod_folders))
+        
 
 
     if event == "Generate Color Config":
