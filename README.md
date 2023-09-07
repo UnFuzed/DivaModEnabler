@@ -14,6 +14,7 @@ like enabling and disabling many different mods quickly. There is plans for more
 - Editing config.toml directly from DivaModEnabler
 - Error log if a mod won't work properly
 - Mod priority loading
+- Resetting mod order from priority
 - More Misc information about installed mods
 - User made custom GUI colors
 - Export mod list 
