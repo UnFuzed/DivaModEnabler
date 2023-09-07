@@ -499,7 +499,6 @@ while True:
     if event == "Reset Mod Order":
         mod_folders = os.listdir(os.getcwd() + '/mods')
         window["--List--"].update(mod_folders)
-        window["--List--"].update()
         window["--Text--"].update("Log: Reset Mod Order")
         window["--List--"].update(set_to_index = 0)
         window["--List--"].update(scroll_to_index = 0)
