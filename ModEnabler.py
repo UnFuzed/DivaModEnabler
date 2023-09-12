@@ -1,4 +1,4 @@
-#Version 1.4
+#Version 1.4.1
 #DivaModEnabler
 #UnFuzed
 
@@ -27,7 +27,7 @@ default_custom_colors = {
         }
 
 default_mod_template = 'enabled = true\n\
-name = Template Mod\n\
+name = "Template Mod"\n\
 description = "This is a template mod!"\n\
 version = "1.0"\n\
 date = "27.05.2022"\n\
@@ -248,7 +248,7 @@ column_two = [
              [psg.Push(), psg.Text("Mod Name", key = "--Name--", font = ("Arial", 15, "bold"), size = 30, justification = "center", pad = ((0, 0), (0, 14))), psg.Push()],
              [psg.Checkbox("Enabled",True, enable_events = True, key = "--Check--"), psg.Push(), psg.Button("Open", size = (10, 1)), psg.Button(">", size = (2, 1), key = "--Extend--")],
              [psg.Multiline("", key = "--Viewer--", size = (50, 26), enable_events = True)],
-             [psg.Push(), psg.Text("Diva Mod Enabler V1.4", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
+             [psg.Push(), psg.Text("Diva Mod Enabler V1.4.1", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
              ]
 column_three = [
                [psg.Text('', size = (10, 2), pad = 10)],
