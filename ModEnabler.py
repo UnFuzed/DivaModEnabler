@@ -83,8 +83,28 @@ def update_mod_enable(select):
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+def mod_folder_name():
+    
+#ADDDING MOD FOLDER NAME
+    try:
+        with open("config.toml", "r") as file:
+            contents = file.read()
+
+    except:
+        psg.PopupError("Error! \nNo config.toml found", title = "DivaModEnabler")
+        sys.exit()
+
+    else:
+        folder_name= ast.literal_eval(contents[contents.find("mods ="):])
+
+        return folder_name
+
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #checks priority line to see what mods should be loaded in what order 
 def load_mods(mod_folders):
+
     try:
 
         mod_folders = os.listdir(os.getcwd() + '/mods')
