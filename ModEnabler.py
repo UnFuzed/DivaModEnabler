@@ -13,6 +13,7 @@ import json
 
 
 mod_folders = []
+mods = ""
 
 default_custom_colors = {
         "enabled" : True, 
@@ -35,7 +36,7 @@ author = "Skyth"\n\
 include = ["."]\n'
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 def color_load():
 
@@ -71,17 +72,17 @@ def color_load():
         psg.theme("DarkBlue14")
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 
 #writes to viewer heo new contents of the config.toml
 def update_mod_enable(select):
-    with open(os.getcwd() + "/mods/" + select + "/" + "config.toml", "r") as file:
+    with open(os.getcwd() + "/" + mods + "/" + select + "/" + "config.toml", "r") as file:
             contents = file.read()
             
     window["--Viewer--"].update(contents)
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 def mod_folder_name():
     
@@ -97,17 +98,17 @@ def mod_folder_name():
     else:
         folder_name= ast.literal_eval(contents[contents.find("mods ="):])
 
-        return folder_name
+        return folder_name 
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 #checks priority line to see what mods should be loaded in what order 
 def load_mods(mod_folders):
 
     try:
 
-        mod_folders = os.listdir(os.getcwd() + '/mods')
+        mod_folders = os.listdir(os.getcwd() + mods)
 
     except Exception as error:
         psg.PopupError("Error! \nPlease have a 'mods' folder in the same location as DivaModEnabler", title = "DivaModEnabler")
@@ -174,7 +175,7 @@ def load_mods(mod_folders):
 
             return mod_folders
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------
 
 
 #function to check if a mod is disabled/enabled or not a real mod
@@ -184,7 +185,7 @@ def check_mod(select, write):
     
     try:
         #tries to open the config.toml of the mod
-        with open(os.getcwd() + "/mods/" + select + "/" + "config.toml", "r") as file:
+        with open(os.getcwd() + "/" + mods + "/" + select + "/" + "config.toml", "r") as file:
             contents = file.read()
             
     except:
@@ -217,10 +218,10 @@ def check_mod(select, write):
             window["--Check--"].update(disabled = True)
             
         
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------
         
         #checks for a DLL file in the mod and include = line
-        for files in os.listdir(os.getcwd() + "/mods/" + select):
+        for files in os.listdir(os.getcwd() + "/" + mods + "/" + select):
             
              #if there is a DLL file and there is no line for it in the config.toml.
             if ".dll" in files:
@@ -241,7 +242,7 @@ def check_mod(select, write):
 
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -253,7 +254,7 @@ psg.set_global_icon(base64)
 mod_folders = load_mods(mod_folders)
 color_load()     
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -289,7 +290,7 @@ layout = [
 window = psg.Window("DivaModEnabler", layout, grab_anywhere = True, enable_close_attempted_event=True, finalize = True)
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------
                 
                 
 #checks first mod on start up
@@ -308,7 +309,7 @@ while True:
         break
     
     
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------
     
     #resets the listbox with updated folders
     if event == "Refresh":
@@ -323,19 +324,19 @@ while True:
         check_mod(mod_folders[0], True)
         color_load()
    
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------    
+#------------------------------------------------------------------------------------------------------------------------------------ 
       
     #if clicking on new mod name
     if event == "--List--":
         check_mod(values["--List--"][0], True)
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------
                
     if event == "--Check--":
         
         #opens the config.toml to check if its enabled or disabled  
-        with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "r") as file:
+        with open(os.getcwd() + "/" + mods + "/" + values["--List--"][0] + "/" + "config.toml", "r") as file:
             contents = file.read()
             
         #checks if they should disable or enable the mod
@@ -352,19 +353,19 @@ while True:
                 window["--Text--"].update("Log: Disabled " + values["--List--"][0])
 
         #writes the new config.toml text
-        with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
+        with open(os.getcwd() + "/" + mods + "/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
             file.write(new_entry)
             
         update_mod_enable(values["--List--"][0])
     
     
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------   
+#------------------------------------------------------------------------------------------------------------------------------------
     
         
     if event == "--Viewer--":
         
         #writes new entry into config.toml
-        with open(os.getcwd() + "/mods/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
+        with open(os.getcwd() + "/" + mods + "/" + values["--List--"][0] + "/" + "config.toml", "w") as file:
             file.write(values["--Viewer--"])
         
         #makes sure the file gets saved
@@ -374,15 +375,15 @@ while True:
         check_mod(values["--List--"][0], False)
        
        
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+#------------------------------------------------------------------------------------------------------------------------------------
        
           
     #enabling all mods  
     if event == "Enable All":
-        for mod in os.listdir(os.getcwd() + "/mods"):
+        for mod in os.listdir(os.getcwd() + "/" + mods):
         
             try:
-                with open(os.getcwd() + "/mods/" + mod + "/" + "config.toml", "r") as file:
+                with open(os.getcwd() + "/" + mods + "/" + mod + "/" + "config.toml", "r") as file:
                     contents = file.read()
             except:
                 pass
@@ -394,21 +395,21 @@ while True:
                 window["--Check--"].update(True)
                     
             
-                with open(os.getcwd() + "/mods/" + mod + "/" + "config.toml", "w") as file:
+                with open(os.getcwd() + "/" + mods + "/" + mod + "/" + "config.toml", "w") as file:
                     file.write(new_entry)
                     
                 update_mod_enable(values["--List--"][0])
                     
     
-   #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+   #---------------------------------------------------------------------------------------------------------------------------------
    
        
     #disabling all mods      
     if event == "Disable All":
-        for mod in os.listdir(os.getcwd() + "/mods"):
+        for mod in os.listdir(os.getcwd() + "/" + mods):
             
             try:
-                with open(os.getcwd() + "/mods/" + mod + "/" + "config.toml", "r") as file:
+                with open(os.getcwd() + "/" + mods + "/" + mod + "/" + "config.toml", "r") as file:
                     contents = file.read()
             except:
                 pass
@@ -419,14 +420,14 @@ while True:
                 window["--Check--"].update(False)
                     
             
-                with open(os.getcwd() + "/mods/" + mod + "/" + "config.toml", "w") as file:
+                with open(os.getcwd() + "/" + mods + "/" + mod + "/" + "config.toml", "w") as file:
                     file.write(new_entry)
                     
                     
                 update_mod_enable(values["--List--"][0])
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                 
+#------------------------------------------------------------------------------------------------------------------------------------               
     if event == "Move Up" or event == "Move Down":
 
         index = mod_folders.index(values["--List--"][0])
@@ -467,7 +468,7 @@ while True:
 
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                 
+#------------------------------------------------------------------------------------------------------------------------------------              
       
 
     #hidng and showing the options menu
@@ -484,7 +485,7 @@ while True:
                 window["--Extend--"].update(">")
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                 
+#------------------------------------------------------------------------------------------------------------------------------------              
       
 #add options menu here
 
@@ -498,7 +499,7 @@ while True:
         load_mods(mod_folders)
 
         for mod in mod_folders:
-            with open(os.getcwd() + "/mods/" + mod + "/" + "config.toml", "r") as file:
+            with open(os.getcwd() + "/" + mods + "/" + mod + "/" + "config.toml", "r") as file:
                 mod_list += mod
 
                 if not file.read().find("enabled = true") == -1:
@@ -517,7 +518,7 @@ while True:
 
 
     if event == "Reset Mod Order":
-        mod_folders = os.listdir(os.getcwd() + '/mods')
+        mod_folders = os.listdir(os.getcwd() + "/" + mods)
         window["--List--"].update(mod_folders)
         window["--Text--"].update("Log: Reset Mod Order")
         window["--List--"].update(set_to_index = 0)
@@ -554,8 +555,8 @@ while True:
     if event == "Create Mod":
         try:
 
-            os.makedirs(os.getcwd() + "/mods/Template Mod/rom")
-            with open(os.getcwd() + "/mods/Template Mod/config.toml", "x") as file:
+            os.makedirs(os.getcwd() + "/" + mods + "/Template Mod/rom")
+            with open(os.getcwd() + "/" + mods + "/Template Mod/config.toml", "x") as file:
                 file.write(default_mod_template)
 
         except:
@@ -577,18 +578,18 @@ while True:
 
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                 
+#------------------------------------------------------------------------------------------------------------------------------------                 
       
 #When opening the mod folder      
     if event == "Open":
         
         match platform.system():
         
-            case "Windows": os.startfile(os.getcwd() + "/mods/" + values["--List--"][0])
-            case "Linux": os.system('xdg-open "%s"' % os.getcwd() + "/mods/" + values["--List--"][0])
+            case "Windows": os.startfile(os.getcwd() + "/" + mods + "/" + values["--List--"][0])
+            case "Linux": os.system('xdg-open "%s"' % os.getcwd() + "/" + mods + "/" + values["--List--"][0])
             
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------
       
         
         
