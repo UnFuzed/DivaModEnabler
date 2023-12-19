@@ -19,6 +19,7 @@ like enabling and disabling many different mods quickly. There is plans for more
 - User made custom GUI colors
 - Export mod list 
 - Creation of Template Mod
+- Launching DIVA
 
 
 ## Planned Features:
