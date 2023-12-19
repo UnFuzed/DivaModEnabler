@@ -1,4 +1,4 @@
-#Version 1.4.1
+#Version 1.5.0
 #DivaModEnabler
 #UnFuzed
 
@@ -13,7 +13,7 @@ import json
 
 
 mod_folders = []
-mods = ""
+mods = "/mods"
 
 default_custom_colors = {
         "enabled" : True, 
@@ -75,7 +75,7 @@ def color_load():
 #------------------------------------------------------------------------------------------------------------------------------------
 
 
-#writes to viewer heo new contents of the config.toml
+#writes to viewer the new contents of the config.toml
 def update_mod_enable(select):
     with open(os.getcwd() + "/" + mods + "/" + select + "/" + "config.toml", "r") as file:
             contents = file.read()
@@ -84,21 +84,21 @@ def update_mod_enable(select):
 
 #------------------------------------------------------------------------------------------------------------------------------------
 
-def mod_folder_name():
+# def mod_folder_name():
     
-#ADDDING MOD FOLDER NAME
-    try:
-        with open("config.toml", "r") as file:
-            contents = file.read()
+# #ADDDING MOD FOLDER NAME
+#     try:
+#         with open("config.toml", "r") as file:
+#             contents = file.read()
 
-    except:
-        psg.PopupError("Error! \nNo config.toml found", title = "DivaModEnabler")
-        sys.exit()
+#     except:
+#         psg.PopupError("Error! \nNo config.toml found", title = "DivaModEnabler")
+#         sys.exit()
 
-    else:
-        folder_name= ast.literal_eval(contents[contents.find("mods ="):])
+#     else:
+#         folder_name= ast.literal_eval(contents[contents.find("mods ="):])
 
-        return folder_name 
+#         return folder_name 
 
 
 #------------------------------------------------------------------------------------------------------------------------------------
@@ -272,14 +272,15 @@ column_two = [
              [psg.Push(), psg.Text("Diva Mod Enabler V1.4.1", size = 20), psg.Text("Mods: " + str(len(mod_folders)), size = 8, key = "--Mod Count--")]
              ]
 column_three = [
-               [psg.Text('', size = (10, 2), pad = 10)],
-               [psg.Button('Download Mods', size = (10, 2), pad = 10)],
-               [psg.Button('Export Mods List', size = (10, 2), pad = 10)],
-               [psg.Button('Reset Mod Order', size = (10, 2), pad = 10)],
-               [psg.Button('Generate Color Config', size = (10, 2), pad = 10)],
-               [psg.Button('Github Page', size = (10, 2), pad = 10)],
-               [psg.Button('Create Mod', size = (10, 2), pad = 10)],
-               [psg.Button('Exit', size = (10, 2), pad = 10)],
+               [psg.Text('', size = (10, 2), pad = 5)],
+               [psg.Button('Download Mods', size = (10, 2), pad = 5)],
+               [psg.Button('Export Mods List', size = (10, 2), pad = 5)],
+               [psg.Button('Reset Mod Order', size = (10, 2), pad = 5)],
+               [psg.Button('Generate Color Config', size = (10, 2), pad = 5)],
+               [psg.Button('Github Page', size = (10, 2), pad = 5)],
+               [psg.Button('Create Mod', size = (10, 2), pad = 5)],
+               [psg.Button('Launch DIVA', size = (10, 2), pad = 5)],
+               [psg.Button('Exit', size = (10, 2), pad = 5)],
                ]
 
 
@@ -299,7 +300,6 @@ check_mod(mod_folders[0], True)
                     
 #main loop
 while True:
-    print(mod_folders)
         
     event, values = window.read()
     window["--Text--"].update("Log: ")
@@ -570,6 +570,9 @@ while True:
             window["--List--"].update(set_to_index = 0)
             update_mod_enable(mod_folders[0])
             check_mod(mod_folders[0], True)
+
+    if event == "Launch DIVA":
+        os.startfile(f"{os.getcwd()}/DivaMegaMix.exe")
 
 
     if event == "Exit":
